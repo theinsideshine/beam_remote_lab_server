@@ -2,6 +2,10 @@
 # Comandos
 # {info:'all-params'}   Envia todos los parametros en formato json.
 # {info:'version'}      Envia  la version del firmware.
+# {info:'status'}       Envia  es estatus del ensayo.
+# {info:'reaction_one'} Devuelve la reaccion 1 del ensayo.
+# {info:'reaction_two'} Devuelve la reaccion 2 del ensayo.
+# {info:'flexion'}      Devuelve la flexion  del ensayo.
 # {cmd:'start'}   Comienza el ensayo
 
 

@@ -1,10 +1,14 @@
-# VERSION 0.00.01
-
 from flask import Flask, jsonify, request
 from serial_device import SerialDevice
 import sys
 import json  #pip install 
 import time
+
+#Version 1.0.0  first version work with client insomnia
+
+#TODO: Unificar comandos y parametros servidor/arduino segun uso del experimentos
+#      Evaluar tener una copia en memoria de los parametros del arduino.
+
 
 ser = SerialDevice()
 json_fields = {} 
@@ -83,10 +87,25 @@ def putParmForce(force):
     return jsonify(json_fields)
 
 @app.route('/comands/start', methods=['PUT'])
+<<<<<<< HEAD
+def putCmdStart():  #por razones de compatibilidad esta peticion es bloqueante.
+    ser.send_cmd("{cmd:'start'}")
+    while (True):
+        json_fields = ser.read_answer() #viene convertido en dict usa ' '
+        print (json_fields)
+        print (json_fields.get('st_test'))        #chequea key = 'st_test'
+        if (("st_test" in json_fields) == True ) :#chequea el valor = 0
+            if (json_fields.get('st_test') == 0):
+                print(1)
+                return jsonify(json_fields)
+        
+    
+=======
 def putCmdStart():
     ser.send_cmd("{cmd:'start'}")    
     json_fields = ser.read_answer()   
     return jsonify(json_fields)
+>>>>>>> ae39222d5d2e3f3be217ad2a8f414b29d94a9e07
     
     
 

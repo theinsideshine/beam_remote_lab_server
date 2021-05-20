@@ -1,14 +1,12 @@
+
 from flask import Flask, jsonify, request
 from serial_device import SerialDevice
+from flask_cors import CORS
 import sys
-import json  #pip install 
+import json  
 import time
 
-#Version 1.0.0  first version work with client insomnia
-
-#TODO: Unificar comandos y parametros servidor/arduino segun uso del experimentos
-#      Evaluar tener una copia en memoria de los parametros del arduino.
-
+#Version 1.0.01 add Cors
 
 ser = SerialDevice()
 json_fields = {} 
@@ -22,13 +20,23 @@ time.sleep(3)# arduino al iniciliarse el puerto serie ser resetea, este delay es
 
 app =  Flask(__name__)
 
+#resuelve la seguridad del navegador de bloquear las peticiones locales 
+ CORS(app)
+
+#cors = CORS(app, resources={
+#    r"/*": {
+#        "origins":"*"
+#        }
+#    })
+
+
 from config import products
 
 @app.route('/ping')
 def ping():
     return jsonify({"message":"pong!"})
 
-@app.route('/parameters')
+@app.route('/info/parameters')
 def getParameters():
     ser.send_cmd("{info:'all-params'}") 
     json_fields = ser.read_answer()   
@@ -73,6 +81,8 @@ def getFlexion():
 
 
 
+
+
 @app.route('/parameters/distance/<string:distance>', methods=['PUT'])
 def putParmDistance(distance):    
     ser.send_cmd("{distance:'"+distance+"'}")    
@@ -87,7 +97,6 @@ def putParmForce(force):
     return jsonify(json_fields)
 
 @app.route('/comands/start', methods=['PUT'])
-<<<<<<< HEAD
 def putCmdStart():  #por razones de compatibilidad esta peticion es bloqueante.
     ser.send_cmd("{cmd:'start'}")
     while (True):
@@ -100,12 +109,6 @@ def putCmdStart():  #por razones de compatibilidad esta peticion es bloqueante.
                 return jsonify(json_fields)
         
     
-=======
-def putCmdStart():
-    ser.send_cmd("{cmd:'start'}")    
-    json_fields = ser.read_answer()   
-    return jsonify(json_fields)
->>>>>>> ae39222d5d2e3f3be217ad2a8f414b29d94a9e07
     
     
 
@@ -114,4 +117,4 @@ def putCmdStart():
 if __name__ == '__main__':
     app.run( host='0.0.0.0', port=4000)
     
-    
+     

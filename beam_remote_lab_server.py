@@ -6,11 +6,14 @@ import sys
 import json  
 import time
 
-#Version 1.0.01 add Cors
+
+
+#Version 1.0.03 
+#      ADD print version     get/step_cal   get/put step_k
 
 ser = SerialDevice()
 json_fields = {} 
-
+print("Version 1.0.03. ")
 if ser.open('/dev/ttyUSB0'): #Si no encuentra el COM LO BUSCA    
     print("Conectado.")
 else:
@@ -39,6 +42,13 @@ def ping():
 @app.route('/info/parameters')
 def getParameters():
     ser.send_cmd("{info:'all-params'}") 
+    json_fields = ser.read_answer()   
+   # return (json_fields)
+    return jsonify(json_fields)
+
+@app.route('/info/calibration')
+def getCalibration():
+    ser.send_cmd("{info:'all-calibration'}") 
     json_fields = ser.read_answer()   
    # return (json_fields)
     return jsonify(json_fields)
@@ -93,6 +103,12 @@ def putParmDistance(distance):
 @app.route('/parameters/force/<string:force>', methods=['PUT'])
 def putParmForce(force):
     ser.send_cmd("{force:'"+force+"'}")    
+    json_fields = ser.read_answer()   
+    return jsonify(json_fields)
+
+@app.route('/parameters/step_k/<string:step_k>', methods=['PUT'])
+def putParmStepK(step_k):
+    ser.send_cmd("{step_k:'"+step_k+"'}")    
     json_fields = ser.read_answer()   
     return jsonify(json_fields)
 

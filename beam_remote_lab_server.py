@@ -24,7 +24,7 @@ time.sleep(3)# arduino al iniciliarse el puerto serie ser resetea, este delay es
 app =  Flask(__name__)
 
 #resuelve la seguridad del navegador de bloquear las peticiones locales 
- CORS(app)
+CORS(app)
 
 #cors = CORS(app, resources={
 #    r"/*": {
